@@ -1,0 +1,137 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2012                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      fvSolution;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+solvers
+{
+
+
+"cellDisplacement.*"
+    {
+        solver          GAMG;
+        tolerance       1e-8;
+        relTol          0;
+        smoother        GaussSeidel;
+        cacheAgglomeration true;
+        nCellsInCoarsestLevel 10;
+        agglomerator    faceAreaPair;
+        mergeLevels     1;
+    }
+
+    p
+    {
+        solver          GAMG;
+        tolerance       1e-05;
+        relTol          0.1;
+        smoother        GaussSeidel;
+    }
+
+    pFinal
+    {
+        $p;
+        smoother        DICGaussSeidel;
+        tolerance       1e-06;
+        relTol          0;
+    }
+
+
+    pcorr
+    {
+        $pFinal;
+        solver          PCG;
+        preconditioner  DIC;
+    }
+
+    pcorrFinal
+    {
+        $pcorr;
+        relTol          0;
+    }
+
+    "(U)"
+    {
+        solver          PBiCGStab;
+        preconditioner  DILU;
+        tolerance       1e-05;
+        relTol          0.1;
+    }
+
+    "(U)Final"
+    {
+        solver          PBiCGStab;
+        preconditioner  DILU;
+        tolerance       1e-06;
+        relTol          0.1;
+    }
+    
+
+    "(k|epsilon|nuTilda|s)"
+    {
+        solver          smoothSolver;
+        smoother        GaussSeidel;
+        tolerance       1e-07;
+        relTol          0;
+    }
+
+
+    "(k|epsilon|nuTilda|s)Final"
+    {
+        solver          smoothSolver;
+        smoother        GaussSeidel;
+        tolerance       1e-07;
+        relTol          0;
+    }
+    
+    Phi
+    {
+        solver          GAMG;
+        smoother        DIC;
+
+        tolerance       1e-06;
+        relTol          0.01;
+    }
+}
+
+PIMPLE
+{
+    momentumPredictor  no;
+    consistent         yes;
+
+    nOuterCorrectors   20;
+    nCorrectors     1;
+    nNonOrthogonalCorrectors 2;
+
+//    pRefCell		0;
+//    pRefValue		0;
+    turbOnFinalIterOnly		no;
+}
+
+relaxationFactors
+{
+    fields
+    {
+	p		    0.8;
+	pFinal		$p;
+    }
+
+    equations
+    {
+	"(U|k|omega|epsilon)"		0.8;
+	"(U|k|omega|epsilon)Final"	1;
+    }
+
+}
+// ************************************************************************* //

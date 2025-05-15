@@ -1,0 +1,174 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v1912                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      blockMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+scale   1;
+
+// user vars //
+
+
+ND  20; // cell per diam
+D   0.025; // diam
+L    #calc "40*$D"; // pipe length
+nozzlet #calc "4*$D"; // nozzle to left wall
+Hdown #calc "1*$D"; // down the nozzle, height
+Hup #calc "15*$D"; // from nozzel to ceil, height
+H2 #calc "$Hdown+$D"; // collateral
+H3 #calc "$Hdown+$D+$Hup"; // collateral
+w 0.1; // spanwise
+
+Ndown   #calc "round($Hdown/$D*$ND)";
+Nup     #calc "round(0.5*$Hup/$D*$ND)";
+Nnozzle #calc "round($nozzlet/$D*$ND) ";
+Narea   #calc "round(($L-$nozzlet)/$D*$ND) ";
+Nw 1;
+//
+//
+//
+
+vertices
+(
+    ( 0        0  0 )    //0
+    ($nozzlet  0  0 )    //1
+    ($L        0  0 )    //2
+    (0         0  $Hdown)//3
+    ($nozzlet  0  $Hdown)//4
+    ($L        0  $Hdown)//5
+    (0         0  $H2)   //6
+    ($nozzlet  0  $H2 )  //7
+    ($L        0  $H2 )  //8
+    (0         0  $H3 )  //9
+    ( $nozzlet 0  $H3 )  //10
+    ( $L       0  $H3 )  //11
+
+    ( 0        $w  0 )    //12
+    ($nozzlet  $w  0 )    //13
+    ($L        $w  0 )    //14
+    (0         $w  $Hdown)//15
+    ($nozzlet  $w  $Hdown)//16
+    ($L        $w  $Hdown)//17
+    (0         $w  $H2)   //18
+    ($nozzlet  $w  $H2 )  //19
+    ($L        $w  $H2 )  //20
+    (0         $w  $H3 )  //21
+    ( $nozzlet $w  $H3 )  //22
+    ( $L       $w  $H3 )  //23
+);
+
+blocks
+(
+    hex (0 1 13 12 3 4 16 15) ($Nnozzle  $Nw $Ndown) simpleGrading (1 1  1)
+    hex (1 2 14 13 4 5 17 16) ($Narea    $Nw $Ndown) simpleGrading (1 1  1)
+    hex (4 5  17 16 7 8 20 19) ($Narea   $Nw $ND   ) simpleGrading (1 1  1)
+    hex (6 7 19 18 9 10 22 21) ($Nnozzle $Nw $Nup  ) simpleGrading (1 1  3)
+    hex (7 8 20 19 10 11 23 22) ($Narea  $Nw $Nup  ) simpleGrading (1 1  3)
+
+   //hex (0 1 3 2 0 1 7 6) ($Nx $NRinner  1) simpleGrading (1 1  1)
+    //hex (2 3 5 4 6 7 9 8) ($Nx $NRouter  1)   simpleGrading (1 1 1)
+);
+
+edges
+(
+);
+
+boundary
+(
+    inlet
+    {
+        type patch;
+        faces
+        (
+            (4 7 19 16)
+        );
+    }
+
+    outlet
+    {
+        type patch;
+        faces
+        (
+            (11 8 20 23)
+            (8 5 17 20)
+            (5 2 14 17)
+        );
+    }
+
+
+    top
+    {
+        type patch;
+        faces
+        (
+            (9 10 22 21)
+            (10 11 23 22)
+        );
+    }
+
+    bottom
+    {
+        type wall;
+        faces
+        (
+            (0 12 13 1)
+            (2 1 13 14)
+        );
+    }
+
+
+    coinlet
+    {
+        type wall;
+        faces
+        (
+            (6 9 21 18)
+            (0 3 15 12)
+        );
+    }
+
+    nozzleWalls
+    {
+        type wall;
+        faces
+        (
+            (7 6 18 19)
+            (3 4 16 15)
+        );
+    }
+
+
+    empty
+    {
+        type empty;
+        faces
+        (
+            (1 4 3 0)
+            (16 13 12 15)
+            (2 5 4 1)
+            (14 13 16 17)
+            (5 8 7 4 )
+            (20 17 16 19)
+            (7 10 9 6)
+            (22 19 18 21)
+            (11 10 7 8 )
+            (23 20 19 22)
+        );
+    }
+);//*/
+
+mergePatchPairs
+(
+);
+
+// ************************************************************************* //

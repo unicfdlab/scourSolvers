@@ -1,0 +1,48 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  dev                                   |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "constant";
+    object      sedimentProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+rho_s	    2650;
+
+rho_w	    1000;
+
+epsilon     0.55;
+
+kappa	    0.25;
+
+respAngle   0.610865;
+
+c_x         0.55;
+
+d_50        0.00071;
+
+sedTimeStep 0.001;
+
+sedIter     20;
+
+patchName   bottom;
+
+sandSlide   true;//false;
+
+adaptiveAngle false;
+
+sandTimeStep  0.0001;
+
+K_0        0.0005;
+
+sandIter   200;
+
+// ************************************************************************* //

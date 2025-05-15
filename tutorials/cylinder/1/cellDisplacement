@@ -1,0 +1,70 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2012                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volVectorField;
+    object      cellDisplacement;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 1 0 0 0 0 0];
+
+internalField   uniform (0 0 0);
+
+boundaryField
+{
+    inlet
+    {
+        type            fixedValue;//uniformFixedValue;
+        value           uniform (0 0 0);
+    }
+
+    outlet
+    {
+        type            fixedValue;//uniformFixedValue;
+        value           uniform (0 0 0);
+    }
+
+
+    cylinder
+    {
+        type            fixedValue;//uniformFixedValue;
+        value           uniform (0 0 0);
+    }
+
+    
+    Top
+    {
+        type            fixedValue;//uniformFixedValue;
+        value           uniform (0 0 0);
+    }
+
+    ledge
+    {
+        type            zeroGradient;//fixedValue;//uniformFixedValue;
+//        value           uniform (0 0 0);
+    }
+    
+    SideWalls
+    {
+        type           empty;
+      
+    }
+    
+    Bottom
+    {
+        type            fixedValue;//calculate;//zeroGradien1t;//cellMotion;//timeVaryingMappedFixedValue;
+        value           uniform (0 0 0);
+//        mapMethod       nearest;
+//        outOfBounds     clamp;
+    }
+}
+
+// ************************************************************************* //

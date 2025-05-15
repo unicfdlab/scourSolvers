@@ -1,0 +1,44 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2012                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      decompositionDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+numberOfSubdomains  4;
+
+method  scotch;
+
+coeffs
+{
+    n  (4 3 1);
+    delta 0.001;
+}
+
+roots
+12
+(
+"processor0"
+"processor1"
+"processor2"
+"processor3"
+"processor4"
+"processor5"
+"processor6"
+"processor7"
+"processor8"
+"processor9"
+"processor10"
+"processor11"
+);
+
+// ************************************************************************* //
